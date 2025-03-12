@@ -1,32 +1,39 @@
-# Breast Cancer Prediction Using Machine Learning: A Scientific Report
+# Comparative Analysis of Machine Learning Models for Breast Cancer Detection Using Nuclei Morphology Features
+
 
 **Abstract**
-Breast cancer is one of the most prevalent and life-threatening cancers worldwide, with early and accurate diagnosis playing a crucial role in improving patient outcomes. Traditionally, pathologists rely on microscopic examination of cell nuclei to assess malignancy, as abnormal nuclei size and shape are strong indicators of cancerous transformation. However, manual assessment is time-consuming, subject to variability, and increasingly difficult given the growing demand for pathology services. The expansion of digital pathology and the integration of machine learning offers a promising solution by enabling faster, more consistent, and automated classification of breast cancer.
+Breast cancer remains one of the most prevalent and life-threatening cancers worldwide, with early and accurate diagnosis playing a crucial role in improving patient outcomes. Traditionally, pathologists rely on microscopic examination of cell nuclei to assess malignancy, as abnormal nuclei size and shape are strong indicators of cancerous transformation. However, manual assessment is time-consuming, subject to variability, and increasingly difficult given the growing demand for pathology services. The integration of digital pathology and machine learning offers a promising solution by enabling faster, more consistent, and automated classification of breast cancer.
 
-In this study, we develop a machine-learning model that predicts breast cancer based on nuclei size and shape features extracted from histopathological images. We implement both a logistic regression model and a deep learning model (multi-layer perceptron) and evaluate their performance using accuracy, precision, recall, and F1-score. The deep learning model outperforms logistic regression, achieving higher classification accuracy and improved sensitivity in identifying malignant cases. These findings demonstrate the potential of machine learning in revolutionising breast cancer triage and diagnosis, reducing reliance on time-intensive manual assessment while enhancing diagnostic accuracy.
+In this study, we develop a machine-learning model that predicts breast cancer based on nuclei size and shape features extracted from histopathological images. We implement and compare a Random Forest classifier and a multi-layer perceptron (MLP) deep learning model. Their performance is evaluated using accuracy, precision, recall, F1-score, and ROC-AUC. Both models achieve high classification accuracy, with the MLP showing slightly improved recall, making it better suited for identifying malignant cases.
 
-This study contributes to the growing field of AI-assisted diagnostics, highlighting how computational tools can support pathologists in early breast cancer detection. Future work will focus on integrating convolutional neural networks (CNNs) for medical image analysis and deploying AI-driven models in real-world clinical workflows.
+Additionally, we analyse feature importance in the Random Forest model and explore the potential benefits of combining both models through an ensemble approach. Visualizations such as ROC curves and confusion matrices further illustrate the comparative performance of these models.
+This study contributes to the growing field of AI-assisted diagnostics, demonstrating how computational tools can enhance early breast cancer detection. Future work will focus on integrating convolutional neural networks (CNNs) for medical image analysis and developing ensemble models to further improve classification performance.
+
+
 
 **1. Introduction**
 
-Breast cancer remains one of the leading causes of cancer-related mortality worldwide, with early detection playing a critical role in improving patient survival rates. Pathologists typically assess breast tissue samples under a microscope, examining the size, shape, and structure of cell nuclei to determine malignancy. Nuclei size, in particular, is a well-established indicator of cancerous transformation, as malignant cells often exhibit irregularly enlarged nuclei with high variability in shape and texture. However, manual assessment is highly time-consuming, subject to inter-observer variability, and can be challenging when pathologists are faced with large volumes of samples.
+Breast cancer remains a leading cause of cancer-related mortality worldwide, with early detection playing a critical role in improving patient survival rates. Pathologists typically assess breast tissue samples under a microscope, examining the size, shape, and structure of cell nuclei to determine malignancy. Malignant cells often exhibit irregularly enlarged nuclei with high variability in shape and texture. However, manual assessment is time-consuming, subject to inter-observer variability, and challenging when pathologists face large volumes of samples.
 
-With the rapid expansion of digital pathology, where whole-slide imaging (WSI) enables pathologists to analyse tissue samples digitally, there is a growing demand for machine learning-based models to assist in faster and more accurate diagnosis. Machine learning has the potential to revolutionise cancer detection by automating nuclei feature extraction and classification, thereby improving diagnostic accuracy and reducing the workload for clinicians. These models can process vast amounts of data in real-time, flagging suspicious cases for further review and significantly accelerating triage and diagnosis in clinical settings.
+The rise of digital pathology and whole-slide imaging (WSI) has created opportunities for machine learning to assist in faster, more accurate diagnoses. Machine learning can automate nuclei feature extraction and classification, improving diagnostic accuracy and reducing the workload for clinicians. These models can process vast amounts of data in real-time, flagging suspicious cases for further review and accelerating cancer triage.
+
+
 
  ![image](https://github.com/user-attachments/assets/e36c6215-bde1-4e57-928c-24d138f5c6cf)
 
 Figure 1. Examples of benign (left) and malignant (right) breast specimens stained with haematoxylin and eosin, at different magnifications. (Image source: Levenson et al., 2025).
 
-**The Primary Objectives of This Study Are:**
+**Primary Objectives:**
 
-•	To analyse the relationship between nuclei morphology and malignancy, validating its role as a key diagnostic feature.
+•	Analyse the relationship between nuclei morphology and malignancy, validating its role as a diagnostic feature.
 
-•	To develop a predictive model that classifies breast cancer using nuclei size and shape features, providing a computational alternative to traditional pathology assessments.
+•	Develop predictive models that classify breast cancer using nuclei size and shape features, offering a computational alternative to traditional pathology assessments.
 
-•	To compare traditional machine learning (logistic regression) with deep learning approaches to determine their effectiveness in predicting breast cancer.
+•	Compare Random Forest (RF) and Multi-Layer Perceptron (MLP) models to determine their effectiveness in breast cancer prediction.
 
-By leveraging digital pathology and machine learning, this study aims to contribute to the growing field of AI-assisted diagnostics, where automated tools can complement the expertise of pathologists, leading to more efficient and accurate breast cancer detection.
+•	Explore feature importance and discuss the potential of an ensemble model combining RF and MLP.
 
+By leveraging digital pathology and machine learning, this study aims to contribute to the advancement of AI-assisted diagnostics, where automated tools can enhance early breast cancer detection.
 
 
 
@@ -64,79 +71,92 @@ The preprocessing steps included:
 
 **2.3 Machine Learning Model Implementation**
 
-Two models were developed and evaluated in this study- logisric regression and multi-layer perceptron (MLP):
+We compare two classification models:
 
-**Logistic Regression Model** 
-Logistic regression is a widely used classification algorithm that estimates the probability of an outcome based on input features. It was implemented as a baseline model to determine the effectiveness of a simple linear classifier in distinguishing between benign and malignant cases.
+**Random Forest Classifier**
+Random Forest is an ensemble learning method that builds multiple decision trees and merges them to improve classification accuracy and control overfitting. It is well-suited for datasets with complex feature interactions.
 
-**Deep Learning Model**
+**Multi-Layer Perceptron (MLP) Deep Learning Model**
+MLP is a deep learning model consisting of:
 
-A deep learning approach was also implemented using a multi-layer perceptron (MLP) with the following architecture:
+•	Input Layer: Accepts standardized nuclei size and shape features.
 
-•	Input Layer: Accepts standardised nuclei size and shape features.
+•	Hidden Layers: Two fully connected layers with ReLU activation to capture complex relationships.
 
-•	Hidden Layers: Two fully connected layers with ReLU activation functions to capture complex relationships in the data.
+•	Output Layer: A single neuron with sigmoid activation for binary classification.
 
-•	Output Layer: A single neuron with a sigmoid activation function for binary classification.
 
 **2.4 Evaluation Metrics**
 
-The models were assessed using the following performance metrics:
+Models are assessed using:
 
-•	Accuracy: The proportion of correctly classified cases.
+•	Accuracy: Correctly classified cases.
 
-•	Precision: The proportion of predicted malignant cases that were actually malignant.
+•	Precision: Proportion of predicted malignant cases that are actually malignant.
 
-•	Recall (Sensitivity): The ability of the model to correctly identify all malignant cases.
+•	Recall: Ability to correctly identify malignant cases.
 
-•	F1-Score: The harmonic mean of precision and recall, providing a balanced measure of model performance.
+•	F1-Score: Harmonic mean of precision and recall.
+
+•	ROC-AUC: Measures classification performance across different thresholds.
+
 
 **3. Results and Analysis**
 **3.1 Model Performance Comparison**
 
-The performance of the logistic regression and deep learning models is summarised in the table below:
+<img width="388" alt="image" src="https://github.com/user-attachments/assets/95300080-e504-4207-b286-bcb6daa1e0fc" />
 
-Model	Accuracy	Precision	Recall	F1-Score
-Logistic Regression	85%	82%	79%	80%
-Deep Learning (MLP)	92%	90%	88%	89%
+Both models perform similarly in accuracy and ROC-AUC, but the MLP demonstrates higher recall, making it more reliable for identifying malignant cases.
 
 
 
+**3.2 Feature Importance Analysis**
+Feature importance was analysed to determine which attributes had the most impact on classification.
 
-The results indicate that the deep learning model outperforms logistic regression across all metrics. The improved recall score suggests that the deep learning model is better at identifying malignant cases, which is crucial for reducing false negatives in clinical settings.
+Top 3 most important features:
 
+1.	Mean Perimeter
 
-**3.2 Data Visualization**
-To further understand the impact of feature selection and model performance, the following visualisations were generated:
+2.	Mean Area
 
-<img width="375" alt="image" src="https://github.com/user-attachments/assets/e5aec5be-ee76-42c9-920c-4144d7627c4d" />
+3.	Mean Radius
 
-Figure 2. Correlation Heatmap: A heatmap of feature correlations revealed that nuclei size and compactness had the highest correlation with malignancy.
+<img width="398" alt="image" src="https://github.com/user-attachments/assets/0711edf3-a906-44da-bbf0-7791927f2546" />
 
-<img width="422" alt="image" src="https://github.com/user-attachments/assets/d0aa3420-f797-4773-8074-1dc75172ef41" />
+Figure 2. Feature important analysis of top five most important feature attributes.
 
-Figure 3. Decision Boundary Plot: Logistic regression exhibited limitations in capturing non-linear decision boundaries, whereas the deep learning model demonstrated greater flexibility in distinguishing benign from malignant cases.
+**3.3 Data Visualisation**
 
-<img width="346" alt="image" src="https://github.com/user-attachments/assets/b920517f-7c67-4e19-ad42-69419a30292f" />
+ROC Curve Insights
 
-Figure 4. ROC Curve Analysis: The receiver operating characteristic (ROC) curve showed that the deep learning model had a higher area under the curve (AUC), indicating superior classification performance.
+Both models show excellent performance in distinguishing between malignant and benign cases, with AUC values of 0.96 (Random Forest) and 0.97 (MLP). MLP's higher AUC suggests it is slightly better at identifying malignant cases, particularly in more complex instances.  Both models are highly effective and could be used in complementary ways (e.g., in an ensemble model) to improve classification performance further.
+
+<img width="284" alt="image" src="https://github.com/user-attachments/assets/28112622-df9c-4f0c-851f-ba6f3f579178" />
+
+Figure 3. ROC curves for the Random Forest and MLP models. 
 
 
 **4. Discussion**
-This study demonstrates that nuclei size and shape are effective predictors of breast cancer malignancy. The deep learning model significantly outperformed logistic regression, likely due to its ability to capture non-linear relationships between features.
-Key findings from the study include:
-•	Machine learning provides a non-invasive, automated method for cancer detection, which can complement traditional diagnostic techniques.
-•	Deep learning models exhibit superior performance, but require larger datasets and greater computational resources.
-•	Feature engineering, particularly the selection of relevant morphological features, plays a critical role in improving model accuracy.
-While the results are promising, the study has some limitations. The dataset used was relatively small, and additional real-world validation is required before deploying such a model in clinical settings. Further research should explore convolutional neural networks (CNNs) for medical imaging applications, as well as integrating other biomarkers for improved accuracy.
+The study shows that both the Random Forest and MLP models performed well in classifying breast cancer based on cell nuclei features. However, the MLP model demonstrated better recall, which is crucial for identifying true malignant cases and reducing the likelihood of false negatives. Given that early detection is critical in breast cancer treatment, the higher recall of MLP makes it an appealing choice for this task.
+
+Random Forest, on the other hand, offers the advantage of interpretability. By analysing the feature importance, we gain valuable insights into which characteristics of the cell nuclei contribute most to the prediction of malignancy. This makes Random Forest useful not only for classification but also for understanding the biological factors that drive cancer development.
+
+One possible future improvement is the combination of these two models in an ensemble approach. By leveraging the stability and feature analysis strength of Random Forest with the deep learning capabilities of MLP, we could create a more robust and accurate predictive tool.
+Additionally, using Convolutional Neural Networks (CNNs) for image-based analysis could further enhance the model’s ability to recognize complex patterns in histopathological images.
+
+
 
 **5. Conclusion and Future Work**
-The results of this study suggest that machine learning, particularly deep learning, can be used as an effective tool for breast cancer prediction based on nuclei morphology. The deep learning model outperformed logistic regression, demonstrating its potential for clinical applications.
-Future research directions include:
-•	Training the model on larger, more diverse datasets to improve generalisation.
-•	Exploring convolutional neural networks (CNNs) for analysing mammogram images.
-•	Deploying the model as a web-based diagnostic tool to facilitate real-world testing and adoption.
+Future directions include:
 
-Advancements in machine learning and medical imaging will continue to enhance early cancer detection, improving patient outcomes and reducing healthcare costs.
+•	Exploring CNNs for image-based classification.
+
+•	Developing an ensemble model.
+
+•	Deploying a real-world AI diagnostic tool.
+
+This study highlights the potential of AI in early breast cancer detection, improving accuracy while reducing clinical workload.
+
+
 
 
